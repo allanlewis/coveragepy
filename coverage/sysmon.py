@@ -3,9 +3,6 @@
 
 """Callback functions and support for sys.monitoring data collection."""
 
-# TODO: https://github.com/python/cpython/issues/111963#issuecomment-2386584080
-# commented out stuff with 111963 below...
-
 from __future__ import annotations
 
 import dis
@@ -327,9 +324,6 @@ class SysMonitor(Tracer):
         # A list of code_objects, just to keep them alive so that id's are
         # useful as identity.
         self.code_objects: list[CodeType] = []
-        # 111963:
-        # # Map id(code_object) -> code_object
-        # self.local_event_codes: dict[int, CodeType] = {}
         self.sysmon_on = False
         self.lock = threading.Lock()
 
@@ -383,12 +377,7 @@ class SysMonitor(Tracer):
             return
         assert sys_monitoring is not None
         sys_monitoring.set_events(self.myid, 0)
-        with self.lock:
-            self.sysmon_on = False
-            # 111963:
-            #     for code in self.local_event_codes.values():
-            #         sys_monitoring.set_local_events(self.myid, code, 0)
-            #     self.local_event_codes = {}
+        self.sysmon_on = False
         sys_monitoring.free_tool_id(self.myid)
 
     @panopticon()
@@ -474,8 +463,6 @@ class SysMonitor(Tracer):
                                 | events.BRANCH_LEFT  # type:ignore[attr-defined]
                             )
                         sys_monitoring.set_local_events(self.myid, code, local_events)
-                        # 111963:
-                        # self.local_event_codes[id(code)] = code
 
         return None
 
