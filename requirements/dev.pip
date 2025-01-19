@@ -181,7 +181,7 @@ urwid==2.6.16
     #   urwid-readline
 urwid-readline==0.15.1
     # via pudb
-virtualenv==20.28.1
+virtualenv==20.29.1
     # via
     #   -r /Users/ned/coverage/trunk/requirements/pip.in
     #   tox
